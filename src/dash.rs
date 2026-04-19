@@ -284,8 +284,8 @@ fn run_loop(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, db_path: &Pat
     loop {
         terminal.draw(|f| draw(f, &app))?;
 
-        if event::poll(Duration::from_millis(200))? {
-            if let Event::Key(key) = event::read()?
+        if event::poll(Duration::from_millis(200))?
+            && let Event::Key(key) = event::read()?
                 && key.kind == KeyEventKind::Press
             {
                 match key.code {
@@ -303,7 +303,6 @@ fn run_loop(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, db_path: &Pat
                     _ => {}
                 }
             }
-        }
 
         // Auto-refresh every 2 seconds
         if tick.elapsed() >= Duration::from_secs(2) {
@@ -745,7 +744,7 @@ fn draw_hourly_chart(f: &mut Frame, area: Rect, hourly: &[(i32, i64, i64)]) {
     };
 
     let spark = Sparkline::default()
-        .data(&buckets)
+        .data(buckets)
         .style(Style::default().fg(Color::LightGreen));
     f.render_widget(spark, spark_area);
 
@@ -822,7 +821,7 @@ fn draw_daily_chart(f: &mut Frame, area: Rect, daily: &[(String, i64, i64)]) {
             Style::default().fg(Color::Yellow),
         ),
         Span::raw("  "),
-        Span::styled(format!("{last}"), Style::default().fg(Color::DarkGray)),
+        Span::styled(last.to_string(), Style::default().fg(Color::DarkGray)),
     ]);
     f.render_widget(Paragraph::new(label), label_area);
 }

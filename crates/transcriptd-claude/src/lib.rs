@@ -565,7 +565,11 @@ fn render_tool_result_content(
                         .and_then(|tid| tool_names.get(tid))
                         .map(|s| s.as_str())
                         .unwrap_or("?");
-                    let err_marker = if is_error.unwrap_or(false) { " ERROR" } else { "" };
+                    let err_marker = if is_error.unwrap_or(false) {
+                        " ERROR"
+                    } else {
+                        ""
+                    };
 
                     let summary = match content {
                         Some(ToolResultContent::Text(s)) => {

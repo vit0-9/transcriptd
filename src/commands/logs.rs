@@ -26,8 +26,8 @@ pub fn cmd_logs(follow: bool, lines: usize) -> Result<()> {
 
 /// Print the last N lines of a file.
 fn tail_lines(path: &std::path::Path, n: usize) -> Result<()> {
-    let content = std::fs::read_to_string(path)
-        .with_context(|| format!("reading {}", path.display()))?;
+    let content =
+        std::fs::read_to_string(path).with_context(|| format!("reading {}", path.display()))?;
     let all_lines: Vec<&str> = content.lines().collect();
     let start = all_lines.len().saturating_sub(n);
     for line in &all_lines[start..] {
@@ -42,8 +42,7 @@ fn tail_follow(path: &std::path::Path, initial_lines: usize) -> Result<()> {
     tail_lines(path, initial_lines)?;
 
     // Now follow
-    let file = std::fs::File::open(path)
-        .with_context(|| format!("opening {}", path.display()))?;
+    let file = std::fs::File::open(path).with_context(|| format!("opening {}", path.display()))?;
     let mut reader = BufReader::new(file);
     reader.seek(SeekFrom::End(0))?;
 

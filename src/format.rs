@@ -63,11 +63,11 @@ pub fn records_to_json(recs: &[TranscriptRecord]) -> String {
 pub fn get_rowids(conn: &Connection, ids: &[&str]) -> HashMap<String, i64> {
     let mut map = HashMap::new();
     for id in ids {
-        if let Ok(rowid) = conn.query_row(
-            "SELECT rowid FROM transcripts WHERE id = ?1",
-            [id],
-            |row| row.get::<_, i64>(0),
-        ) {
+        if let Ok(rowid) =
+            conn.query_row("SELECT rowid FROM transcripts WHERE id = ?1", [id], |row| {
+                row.get::<_, i64>(0)
+            })
+        {
             map.insert(id.to_string(), rowid);
         }
     }
