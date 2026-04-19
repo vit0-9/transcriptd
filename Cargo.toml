@@ -1,0 +1,53 @@
+[workspace]
+members = ["crates/*"]
+resolver = "3"
+
+[package]
+name = "transcriptd"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+description = "Capture AI IDE transcripts (Zed, Claude Code, VSCode Copilot) into searchable markdown + SQLite"
+license = "AGPL-3.0-or-later"
+repository = "https://github.com/vit0-9/transcriptd"
+
+[dependencies]
+transcriptd-core = { path = "crates/transcriptd-core" }
+transcriptd-store = { path = "crates/transcriptd-store" }
+transcriptd-zed = { path = "crates/transcriptd-zed" }
+transcriptd-claude = { path = "crates/transcriptd-claude" }
+transcriptd-vscode = { path = "crates/transcriptd-vscode" }
+transcriptd-codex = { path = "crates/transcriptd-codex" }
+transcriptd-cursor = { path = "crates/transcriptd-cursor" }
+clap = { version = "4", features = ["derive", "env"] }
+anyhow = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serde_yaml = "0.9"
+chrono = { version = "0.4", features = ["serde"] }
+dirs = "6"
+zstd = "0.13"
+walkdir = "2"
+rusqlite = { version = "0.34", features = ["bundled"] }
+notify = { version = "8", features = ["macos_fsevent"] }
+notify-debouncer-mini = "0.6"
+ratatui = "0.29"
+crossterm = "0.28"
+tokio = { version = "1", features = ["full"] }
+axum = { version = "0.8", features = ["json"] }
+axum-extra = { version = "0.10", features = ["typed-header"] }
+tower-http = { version = "0.6", features = ["cors"] }
+hyper-util = { version = "0.1", features = ["tokio"] }
+tokio-stream = "0.1"
+futures = "0.3"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+getrandom = "0.2"
+libc = "0.2"
+comfy-table = "7"
+clap_complete = "4"
+
+[profile.release]
+opt-level = "z"
+lto = true
+strip = true
