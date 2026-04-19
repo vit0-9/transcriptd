@@ -1,0 +1,12 @@
+pub mod completion;
+pub mod digest;
+pub mod ingest;
+pub mod inspect;
+pub mod list;
+pub mod logs;
+pub mod mcp_show;
+pub mod search;
+pub mod service;
+pub mod show;
+pub mod stats;
+pub mod status;
