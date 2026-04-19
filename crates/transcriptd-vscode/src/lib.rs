@@ -12,11 +12,10 @@ use std::sync::{LazyLock, Mutex};
 static WARNED_IDS: LazyLock<Mutex<HashSet<String>>> = LazyLock::new(|| Mutex::new(HashSet::new()));
 
 fn warn_once(id: &str, msg: &str) {
-    if let Ok(mut set) = WARNED_IDS.lock() {
-        if set.insert(id.to_string()) {
+    if let Ok(mut set) = WARNED_IDS.lock()
+        && set.insert(id.to_string()) {
             eprintln!("SKIP {id}: {msg}");
         }
-    }
 }
 
 fn ms_to_iso(ms: i64) -> String {
@@ -414,19 +413,16 @@ fn render_session(
     // Collect mentions from user message parts (kind: "dynamic")
     let mut mentions = Vec::new();
     for req in &session.requests {
-        if let Some(msg) = &req.message {
-            if let Some(parts) = &msg.parts {
+        if let Some(msg) = &req.message
+            && let Some(parts) = &msg.parts {
                 for part in parts {
-                    if let Some(obj) = part.as_object() {
-                        if obj.get("kind").and_then(|v| v.as_str()) == Some("dynamic") {
-                            if let Some(id) = obj.get("id").and_then(|v| v.as_str()) {
+                    if let Some(obj) = part.as_object()
+                        && obj.get("kind").and_then(|v| v.as_str()) == Some("dynamic")
+                            && let Some(id) = obj.get("id").and_then(|v| v.as_str()) {
                                 mentions.push(id.to_string());
                             }
-                        }
-                    }
                 }
             }
-        }
     }
     let mentions_yaml = if mentions.is_empty() {
         String::new()
@@ -535,21 +531,19 @@ fn render_session(
         md.push_str(&format!("## Turn {tn} -- user\n\n{user_text}\n\n"));
 
         // Render user mentions from parts
-        if let Some(msg) = &req.message {
-            if let Some(parts) = &msg.parts {
+        if let Some(msg) = &req.message
+            && let Some(parts) = &msg.parts {
                 for part in parts {
-                    if let Some(obj) = part.as_object() {
-                        if obj.get("kind").and_then(|v| v.as_str()) == Some("dynamic") {
+                    if let Some(obj) = part.as_object()
+                        && obj.get("kind").and_then(|v| v.as_str()) == Some("dynamic") {
                             let id = obj.get("id").and_then(|v| v.as_str()).unwrap_or("");
                             let text = obj.get("text").and_then(|v| v.as_str()).unwrap_or("");
                             if !id.is_empty() {
                                 md.push_str(&format!("[mention: {id}] {text}\n\n"));
                             }
                         }
-                    }
                 }
             }
-        }
 
         if !req.response.is_empty() {
             tn += 1;

@@ -11,11 +11,10 @@ use walkdir::WalkDir;
 static WARNED_IDS: LazyLock<Mutex<HashSet<String>>> = LazyLock::new(|| Mutex::new(HashSet::new()));
 
 fn warn_once(id: &str, msg: &str) {
-    if let Ok(mut set) = WARNED_IDS.lock() {
-        if set.insert(id.to_string()) {
+    if let Ok(mut set) = WARNED_IDS.lock()
+        && set.insert(id.to_string()) {
             eprintln!("SKIP {id}: {msg}");
         }
-    }
 }
 
 pub fn safe_truncate(s: &str, max: usize) -> &str {

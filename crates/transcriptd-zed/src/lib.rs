@@ -177,8 +177,8 @@ pub fn extract_mentions(thread: &ZedThread) -> Vec<String> {
             ZedMessage::Tagged(map) => map,
             ZedMessage::Signal(_) => continue,
         };
-        if let Some(body) = map.get("User") {
-            if let Some(content) = &body.content {
+        if let Some(body) = map.get("User")
+            && let Some(content) = &body.content {
                 for item in content {
                     let ContentItem::Tagged(m) = item;
                     if let Some(mention) = m.get("Mention")
@@ -221,7 +221,6 @@ pub fn extract_mentions(thread: &ZedThread) -> Vec<String> {
                     }
                 }
             }
-        }
     }
     mentions
 }

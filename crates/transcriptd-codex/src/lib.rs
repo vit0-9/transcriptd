@@ -10,11 +10,10 @@ use walkdir::WalkDir;
 static WARNED_IDS: LazyLock<Mutex<HashSet<String>>> = LazyLock::new(|| Mutex::new(HashSet::new()));
 
 fn warn_once(id: &str, msg: &str) {
-    if let Ok(mut set) = WARNED_IDS.lock() {
-        if set.insert(id.to_string()) {
+    if let Ok(mut set) = WARNED_IDS.lock()
+        && set.insert(id.to_string()) {
             eprintln!("SKIP {id}: {msg}");
         }
-    }
 }
 
 fn safe_truncate(s: &str, max: usize) -> &str {
@@ -146,11 +145,10 @@ pub fn extract_all(codex_dir: &str, since: Option<&str>) -> Result<Vec<(String, 
                         .last()
                         .and_then(|t| t.timestamp.as_deref())
                         .or(session.meta.timestamp.as_deref());
-                    if let Some(ts) = last_ts {
-                        if ts < since_ts {
+                    if let Some(ts) = last_ts
+                        && ts < since_ts {
                             continue;
                         }
-                    }
                 }
 
                 let md = render_markdown(&session);
@@ -196,11 +194,10 @@ fn parse_session(jsonl_path: &str) -> Result<Session> {
             }
 
             "turn_context" => {
-                if let Ok(tc) = serde_json::from_value::<TurnContext>(entry.payload) {
-                    if model.is_none() {
+                if let Ok(tc) = serde_json::from_value::<TurnContext>(entry.payload)
+                    && model.is_none() {
                         model = tc.model;
                     }
-                }
             }
 
             "event_msg" => {
@@ -230,13 +227,12 @@ fn parse_session(jsonl_path: &str) -> Result<Session> {
                             .to_string();
                         if !message.is_empty() {
                             // Append to existing agent turn or create new
-                            if let Some(last) = turns.last_mut() {
-                                if last.role == TurnRole::Agent {
+                            if let Some(last) = turns.last_mut()
+                                && last.role == TurnRole::Agent {
                                     last.content.push('\n');
                                     last.content.push_str(&message);
                                     continue;
                                 }
-                            }
                             turns.push(Turn {
                                 role: TurnRole::Agent,
                                 content: message,
@@ -332,8 +328,8 @@ fn parse_session(jsonl_path: &str) -> Result<Session> {
                         let output = payload.get("output").and_then(|v| v.as_str()).unwrap_or("");
                         let is_error = output.starts_with("Error") || output.starts_with("error");
 
-                        if is_error {
-                            if let Some(name) = pending_calls.get(call_id) {
+                        if is_error
+                            && let Some(name) = pending_calls.get(call_id) {
                                 // Mark the tool call as errored
                                 for turn in turns.iter_mut().rev() {
                                     for tc in &mut turn.tools {
@@ -345,7 +341,6 @@ fn parse_session(jsonl_path: &str) -> Result<Session> {
                                     break;
                                 }
                             }
-                        }
                     }
 
                     Some("custom_tool_call") => {
