@@ -178,49 +178,49 @@ pub fn extract_mentions(thread: &ZedThread) -> Vec<String> {
             ZedMessage::Signal(_) => continue,
         };
         if let Some(body) = map.get("User")
-            && let Some(content) = &body.content {
-                for item in content {
-                    let ContentItem::Tagged(m) = item;
-                    if let Some(mention) = m.get("Mention")
-                        && let Some(obj) = mention.as_object()
-                        && let Some(uri_val) = obj.get("uri")
-                    {
-                        if let Some(inner) = uri_val.as_object() {
-                            if let Some(p) = inner
-                                .get("File")
-                                .and_then(|v| v.get("abs_path"))
-                                .and_then(|v| v.as_str())
-                            {
-                                mentions.push(format!("file://{p}"));
-                            } else if let Some(p) = inner
-                                .get("Directory")
-                                .and_then(|v| v.get("abs_path"))
-                                .and_then(|v| v.as_str())
-                            {
-                                mentions.push(format!("dir://{p}"));
-                            } else if let Some(t) = inner.get("Thread").and_then(|v| v.as_object())
-                            {
-                                let name = t.get("name").and_then(|v| v.as_str()).unwrap_or("?");
-                                mentions.push(format!("thread://{name}"));
-                            } else if let Some(p) = inner
-                                .get("Selection")
-                                .and_then(|v| v.get("abs_path"))
-                                .and_then(|v| v.as_str())
-                            {
-                                mentions.push(format!("selection://{p}"));
-                            } else if let Some(url) = inner
-                                .get("Fetch")
-                                .and_then(|v| v.get("url"))
-                                .and_then(|v| v.as_str())
-                            {
-                                mentions.push(url.to_string());
-                            }
-                        } else if let Some(s) = uri_val.as_str() {
-                            mentions.push(s.to_string());
+            && let Some(content) = &body.content
+        {
+            for item in content {
+                let ContentItem::Tagged(m) = item;
+                if let Some(mention) = m.get("Mention")
+                    && let Some(obj) = mention.as_object()
+                    && let Some(uri_val) = obj.get("uri")
+                {
+                    if let Some(inner) = uri_val.as_object() {
+                        if let Some(p) = inner
+                            .get("File")
+                            .and_then(|v| v.get("abs_path"))
+                            .and_then(|v| v.as_str())
+                        {
+                            mentions.push(format!("file://{p}"));
+                        } else if let Some(p) = inner
+                            .get("Directory")
+                            .and_then(|v| v.get("abs_path"))
+                            .and_then(|v| v.as_str())
+                        {
+                            mentions.push(format!("dir://{p}"));
+                        } else if let Some(t) = inner.get("Thread").and_then(|v| v.as_object()) {
+                            let name = t.get("name").and_then(|v| v.as_str()).unwrap_or("?");
+                            mentions.push(format!("thread://{name}"));
+                        } else if let Some(p) = inner
+                            .get("Selection")
+                            .and_then(|v| v.get("abs_path"))
+                            .and_then(|v| v.as_str())
+                        {
+                            mentions.push(format!("selection://{p}"));
+                        } else if let Some(url) = inner
+                            .get("Fetch")
+                            .and_then(|v| v.get("url"))
+                            .and_then(|v| v.as_str())
+                        {
+                            mentions.push(url.to_string());
                         }
+                    } else if let Some(s) = uri_val.as_str() {
+                        mentions.push(s.to_string());
                     }
                 }
             }
+        }
     }
     mentions
 }

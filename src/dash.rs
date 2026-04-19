@@ -286,23 +286,23 @@ fn run_loop(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, db_path: &Pat
 
         if event::poll(Duration::from_millis(200))?
             && let Event::Key(key) = event::read()?
-                && key.kind == KeyEventKind::Press
-            {
-                match key.code {
-                    KeyCode::Char('q') | KeyCode::Esc => return Ok(()),
-                    KeyCode::Char('c')
-                        if key
-                            .modifiers
-                            .contains(crossterm::event::KeyModifiers::CONTROL) =>
-                    {
-                        return Ok(());
-                    }
-                    KeyCode::Up | KeyCode::Char('k') => app.scroll_up(),
-                    KeyCode::Down | KeyCode::Char('j') => app.scroll_down(),
-                    KeyCode::Char('r') => app.refresh(db_path)?,
-                    _ => {}
+            && key.kind == KeyEventKind::Press
+        {
+            match key.code {
+                KeyCode::Char('q') | KeyCode::Esc => return Ok(()),
+                KeyCode::Char('c')
+                    if key
+                        .modifiers
+                        .contains(crossterm::event::KeyModifiers::CONTROL) =>
+                {
+                    return Ok(());
                 }
+                KeyCode::Up | KeyCode::Char('k') => app.scroll_up(),
+                KeyCode::Down | KeyCode::Char('j') => app.scroll_down(),
+                KeyCode::Char('r') => app.refresh(db_path)?,
+                _ => {}
             }
+        }
 
         // Auto-refresh every 2 seconds
         if tick.elapsed() >= Duration::from_secs(2) {

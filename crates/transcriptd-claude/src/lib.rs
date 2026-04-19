@@ -12,9 +12,10 @@ static WARNED_IDS: LazyLock<Mutex<HashSet<String>>> = LazyLock::new(|| Mutex::ne
 
 fn warn_once(id: &str, msg: &str) {
     if let Ok(mut set) = WARNED_IDS.lock()
-        && set.insert(id.to_string()) {
-            eprintln!("SKIP {id}: {msg}");
-        }
+        && set.insert(id.to_string())
+    {
+        eprintln!("SKIP {id}: {msg}");
+    }
 }
 
 pub fn safe_truncate(s: &str, max: usize) -> &str {

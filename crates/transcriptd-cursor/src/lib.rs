@@ -150,9 +150,10 @@ pub fn extract_all(cursor_dir: &str, since: Option<&str>) -> Result<Vec<(String,
         }
 
         if let Some(cutoff) = since_ms
-            && header.last_updated_at.is_some_and(|ts| ts < cutoff) {
-                continue;
-            }
+            && header.last_updated_at.is_some_and(|ts| ts < cutoff)
+        {
+            continue;
+        }
 
         match build_session(&conn, header) {
             Ok(session) => {
