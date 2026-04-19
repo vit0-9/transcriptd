@@ -804,7 +804,7 @@ pub fn dedupe_transcripts(conn: &Connection, dry_run: bool) -> Result<()> {
     }
 
     let mut to_delete = Vec::new();
-    for (canonical_id, mut group) in &mut groups {
+    for (canonical_id, group) in &mut groups {
         if group.len() <= 1 {
             continue;
         }
