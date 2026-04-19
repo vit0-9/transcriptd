@@ -1,0 +1,24 @@
+[package]
+name = "transcriptd-vscode"
+version = "0.1.0"
+edition = "2024"
+license = "AGPL-3.0-or-later"
+
+[lib]
+name = "transcriptd_vscode"
+path = "src/lib.rs"
+
+[[bin]]
+name = "transcriptd-vscode"
+path = "src/main.rs"
+
+[dependencies]
+transcriptd-core = { path = "../transcriptd-core" }
+anyhow = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+chrono = "0.4"
+walkdir = "2"
+dirs = "6"
+clap = { version = "4", features = ["derive"] }
+rusqlite = { version = "0.34", features = ["bundled"] }
