@@ -1,0 +1,24 @@
+[Unit]
+Description=transcriptd — AI transcript indexer daemon
+Documentation=https://github.com/vit0-9/transcriptd
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=%h/.cargo/bin/transcriptd daemon
+Restart=on-failure
+RestartSec=5
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=%h/.local/share/transcriptd
+ReadWritePaths=%h/.config/transcriptd
+PrivateTmp=true
+
+# Environment
+Environment=RUST_LOG=info
+
+[Install]
+WantedBy=default.target
