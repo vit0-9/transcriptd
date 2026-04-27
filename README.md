@@ -4,6 +4,16 @@ Capture, index and search your AI coding conversations.
 
 Single binary. Local SQLite. Works with **Zed**, **Claude Code**, **VSCode Copilot**, **Codex**, and **Cursor**.
 
+ ## Platform Note 
+Currently, transcriptd is primarily developed and tested on macOS. While the core logic is cross-platform Rust, the default IDE paths and some system-level integrations are currently tailored for the macOS environment. Contributions to expand Linux and Windows support are highly welcome!
+
+## Why it was built
+I built transcriptd to solve a specific problem: AI amnesia. >
+Through the MCP (Model Context Protocol) integration, I want my AI agents to have access to my past coding sessions—allowing them to catch up, extract buried architectural decisions, or remember specific bug fixes from weeks ago.
+
+This project is a living tool. I will continue to develop it as long as I have a personal need for this workflow. I invite you to use it and contribute! To keep the scope focused: transcriptd is designed to be the specialized storage and search layer. 
+Operational features like summarization should be achieved by piping the output into other tools.
+
 ## Install
 
 ### From source (requires Rust 1.80+)
